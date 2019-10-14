@@ -25,7 +25,6 @@ setup(
     tests_require=['pytest', 'pytest-django'],
     setup_requires=["pytest-runner"],
     install_requires=[
-        "prometheus-client>=0.7",
     ],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
