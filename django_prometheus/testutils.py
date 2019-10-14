@@ -1,6 +1,7 @@
 import copy
 
-from prometheus_client import REGISTRY
+from prometheus_redis_client import REGISTRY
+from prometheus_redis_client.base_metric import MetricRepresentation
 
 METRIC_EQUALS_ERR_EXPLANATION = """
 %s%s = %s, expected %s.
@@ -39,20 +40,22 @@ class PrometheusTestCaseMixin(object):
           doStuff()
           self.assertMetricDiff(r, 1, 'stuff_done_total')
         """
-        return copy.deepcopy(list(registry.collect()))
+        return copy.deepcopy(list(registry.metrics()))
 
     def getMetricFromFrozenRegistry(self, metric_name, frozen_registry,
                                     **labels):
         """Gets a single metric from a frozen registry."""
-        for metric in frozen_registry:
-            for sample in metric.samples:
-                if sample[0] == metric_name and sample[1] == labels:
-                    return sample[2]
+        for sample in frozen_registry:
+            if isinstance(sample, MetricRepresentation) and sample.name == metric_name and sample.labels == labels:
+                try:
+                    return int(sample.value)
+                except ValueError:
+                    return sample.value
 
     def getMetric(self, metric_name, registry=REGISTRY, **labels):
         """Gets a single metric."""
         return self.getMetricFromFrozenRegistry(
-            metric_name, registry.collect(), **labels)
+            metric_name, registry.metrics(), **labels)
 
     def getMetricVectorFromFrozenRegistry(self, metric_name, frozen_registry):
         """Like getMetricVector, but from a frozen registry."""
@@ -74,7 +77,7 @@ class PrometheusTestCaseMixin(object):
         probably be provided as a function there instead.
         """
         return self.getMetricVectorFromFrozenRegistry(
-            metric_name, registry.collect())
+            metric_name, registry.metrics())
 
     def formatLabels(self, labels):
         """Format a set of labels to Prometheus representation.

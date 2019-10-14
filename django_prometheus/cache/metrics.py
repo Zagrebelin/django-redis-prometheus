@@ -1,4 +1,4 @@
-from prometheus_client import Counter
+from prometheus_redis_client import Counter
 
 django_cache_get_total = Counter(
     'django_cache_get_total', 'Total get requests on cache', ['backend']

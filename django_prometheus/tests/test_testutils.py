@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 import unittest
 from operator import itemgetter
+import prometheus_redis_client
+import redis
 
-import prometheus_client
 from django_prometheus.testutils import PrometheusTestCaseMixin
-
 
 class SomeTestCase(PrometheusTestCaseMixin):
     """A class that pretends to be a unit test."""
@@ -23,11 +23,12 @@ class SomeTestCase(PrometheusTestCaseMixin):
 class PrometheusTestCaseMixinTest(unittest.TestCase):
 
     def setUp(self):
-        self.registry = prometheus_client.CollectorRegistry()
-        self.some_gauge = prometheus_client.Gauge(
+        self.registry = prometheus_redis_client.Registry()
+        self.registry.set_redis(redis.from_url('redis://localhost:6379'))
+        self.some_gauge = prometheus_redis_client.Gauge(
             'some_gauge', 'Some gauge.', registry=self.registry)
         self.some_gauge.set(42)
-        self.some_labelled_gauge = prometheus_client.Gauge(
+        self.some_labelled_gauge = prometheus_redis_client.Gauge(
             'some_labelled_gauge', 'Some labelled gauge.', [
                 'labelred', 'labelblue'], registry=self.registry)
         self.some_labelled_gauge.labels('pink', 'indigo').set(1)

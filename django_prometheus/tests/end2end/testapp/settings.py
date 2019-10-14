@@ -14,6 +14,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 
 import django
+import redis
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -95,37 +96,18 @@ WSGI_APPLICATION = 'testapp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django_prometheus.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
 
-    # Comment this to not test django_prometheus.db.backends.postgres.
-    'postgresql': {
-        'ENGINE': 'django_prometheus.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    },
-
-    # Comment this to not test django_prometheus.db.backends.mysql.
-    'mysql': {
-        'ENGINE': 'django_prometheus.db.backends.mysql',
-        'NAME': 'django_prometheus_1',
-        'USER': 'travis',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    },
 
     # The following databases are used by test_db.py only
     'test_db_1': {
-        'ENGINE': 'django_prometheus.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'test_db_1.sqlite3'),
     },
     'test_db_2': {
-        'ENGINE': 'django_prometheus.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'test_db_2.sqlite3'),
     },
 }
@@ -185,3 +167,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+from prometheus_redis_client import REGISTRY
+REGISTRY.set_redis(redis.from_url("redis://localhost/"))

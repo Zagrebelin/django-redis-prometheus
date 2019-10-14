@@ -1,4 +1,4 @@
-from prometheus_client import Counter
+from prometheus_redis_client import Counter
 
 model_inserts = Counter(
     'django_model_inserts_total',

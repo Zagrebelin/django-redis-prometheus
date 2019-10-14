@@ -1,7 +1,7 @@
 from django.db import connections
 from django.db.backends.dummy.base import DatabaseWrapper
 
-from prometheus_client import Gauge
+from prometheus_redis_client import Gauge
 
 unapplied_migrations = Gauge(
     'django_migrations_unapplied_total',
