@@ -39,11 +39,11 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'django_prometheus.middleware.PrometheusBeforeMiddleware',
+    'django_redis_prometheus.middleware.PrometheusBeforeMiddleware',
     # All your other middlewares go here, including the default
     # middlewares like SessionMiddleware, CommonMiddleware,
     # CsrfViewmiddleware, SecurityMiddleware, etc.
-    'django_prometheus.middleware.PrometheusAfterMiddleware',
+    'django_redis_prometheus.middleware.PrometheusAfterMiddleware',
 )
 ```
 
@@ -80,7 +80,7 @@ the cache backend to use the one provided by django_prometheus
 ```python
 CACHES = {
     'default': {
-        'BACKEND': 'django_prometheus.cache.backends.filebased.FileBasedCache',
+        'BACKEND': 'django_redis_prometheus.cache.backends.filebased.FileBasedCache',
         'LOCATION': '/var/tmp/django_cache',
     }
 }
@@ -104,7 +104,7 @@ class Dog(models.Model):
 Just add the `ExportModelOperationsMixin` as such:
 
 ```python
-from django_prometheus.models import ExportModelOperationsMixin
+from django_redis_prometheus.models import ExportModelOperationsMixin
 
 class Dog(ExportModelOperationsMixin('dog'), models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -162,9 +162,9 @@ django_prometheus in INSTALLED_APPS
 
 ```python
 MIDDLEWARE = (
-        ('django_prometheus.middleware.PrometheusBeforeMiddleware',) +
+        ('django_redis_prometheus.middleware.PrometheusBeforeMiddleware',) +
        MIDDLEWARE +
-        ('django_prometheus.middleware.PrometheusAfterMiddleware',)
+        ('django_redis_prometheus.middleware.PrometheusAfterMiddleware',)
     )
 
 INSTALLED_APPS = INSTALLED_APPS + ('django_prometheus',)
