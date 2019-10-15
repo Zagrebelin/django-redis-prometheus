@@ -1,4 +1,4 @@
-from prometheus_client import Counter
+from prometheus_redis_client import Counter, REGISTRY
 
 connections_total = Counter(
     'django_db_new_connections_total',
@@ -28,3 +28,9 @@ errors_total = Counter(
     'django_db_errors_total',
     ('Counter of execution errors by database, vendor and exception type.'),
     ['alias', 'vendor', 'type'])
+
+try:
+    REGISTRY.add_metric(connections_total, connection_errors_total, execute_total, execute_many_total, errors_total)
+except ValueError:
+    # probably double metrics registration
+    pass
