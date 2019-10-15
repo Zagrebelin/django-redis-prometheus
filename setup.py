@@ -10,7 +10,7 @@ instructions.
 """
 
 setup(
-    name="django-prometheus",
+    name="django-redis-prometheus",
     version="1.1.0",
     author="Uriel Corfa",
     author_email="uriel@corfa.fr",
@@ -20,11 +20,12 @@ setup(
     keywords="django monitoring prometheus",
     url="http://github.com/korfuri/django-prometheus",
     packages=find_packages(),
-    test_suite="django_prometheus.tests",
+    test_suite="django_redis_prometheus.tests",
     long_description=LONG_DESCRIPTION,
     tests_require=['pytest', 'pytest-django'],
     setup_requires=["pytest-runner"],
     install_requires=[
+        'prometheus_redis_client',
     ],
     classifiers=[
         "Development Status :: 5 - Production/Stable",

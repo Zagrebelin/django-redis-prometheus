@@ -13,6 +13,6 @@ urlpatterns = [
     url(r'^sql$', views.sql),
     url(r'^newlawn/(?P<location>[a-zA-Z0-9 ]+)$', views.newlawn),
     url(r'^file$', views.file),
-    url('', include('django_prometheus.urls')),
+    url('', include('django_redis_prometheus.urls')),
     url(r'^admin/', admin.site.urls),
 ]
